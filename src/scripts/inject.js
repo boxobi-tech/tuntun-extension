@@ -1825,7 +1825,7 @@
     if (storageData === undefined) return;
 
     if (window.btReloadRequired) {
-      window.btExports.openToast("BlockTube was updated, this tab needs to be reloaded to use this function", 5000);
+      window.btExports.openToast("TunTun Extension was updated, this tab needs to be reloaded to use this function", 5000);
       return;
     }
 
@@ -2036,7 +2036,7 @@
     }
 
     if (window.btReloadRequired) {
-      window.btExports.openToast("BlockTube was updated, this tab needs to be reloaded to use this function", 5000);
+      window.btExports.openToast("TunTun Extension was updated, this tab needs to be reloaded to use this function", 5000);
       return;
     }
 
@@ -2063,7 +2063,7 @@
   }
 
   // !! Start
-  console.info('BlockTube Init');
+  console.info('TunTun Extension Init');
 
   const isMobileInterface = document.location.hostname.startsWith('m.');
 
@@ -2079,7 +2079,7 @@
       }
       case 'reloadRequired':
         window.btReloadRequired = true;
-        openToast("BlockTube was updated, Please reload this tab to reactivate it", 15000);
+        openToast("TunTun Extension was updated, Please reload this tab to reactivate it", 15000);
         break;
       default:
         break;

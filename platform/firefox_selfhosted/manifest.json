@@ -1,7 +1,7 @@
 {
-  "name": "BlockTube",
+  "name": "TunTun Extension",
   "version": "{EXT_VERSION}",
-  "description": "YouTube™ content blocker",
+  "description": "Safe YouTube browsing for your family. Block unwanted videos, channels, and content with powerful parental controls.",
   "manifest_version": 3,
   "content_scripts": [
     {
@@ -26,7 +26,7 @@
     }
   ],
   "action": {
-    "default_title": "BlockTube Options",
+    "default_title": "TunTun Extension Options",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "assets/icons/16.png",

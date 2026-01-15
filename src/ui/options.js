@@ -230,7 +230,7 @@
           saveForm();
         }
       } catch (ex) {
-        alert('This is not a valid BlockTube backup');
+        alert('This is not a valid TunTun Extension backup');
       }
     };
     reader.readAsText(f);
