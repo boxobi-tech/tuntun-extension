@@ -1,7 +1,7 @@
 {
-  "name": "BlockTube",
+  "name": "TunTun Extension",
   "version": "{EXT_VERSION}",
-  "description": "YouTube™ content blocker",
+  "description": "Safe YouTube browsing for your family. Block unwanted videos, channels, and content with powerful parental controls.",
   "manifest_version": 3,
   "content_scripts": [
     {
@@ -50,5 +50,5 @@
     "48": "assets/icons/48.png",
     "128": "assets/icons/128.png"
   },
-  "homepage_url": "https://github.com/amitbl/blocktube"
+  "homepage_url": "https://github.com/boxobi-tech/tuntun-extension"
 }

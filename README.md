@@ -1,92 +1,247 @@
-# BlockTube
+# TunTun Extension
+**Safe YouTube Browsing for Your Family**
 
-WebExtension for Chrome and Firefox.  
-Filter and block unwanted content from YouTube™.
+*Based on [BlockTube](https://github.com/amitbl/blocktube) by amitbl*
 
-## Extension features
+---
 
-* Block videos via: **Video Title** / **Channel Name** / **Channel ID** / **Video ID**
-* Block comments via **User** / **Comment content**
-* Block videos within YouTube using context menus
-* Blocked videos do not appear anywhere on the site
-* Support for `m.youtube.com` on Firefox for Android and Kiwi Browser
-* Block complete channels
-* Supports both keywords and raw Regex
-* Does not break or limit any features of YouTube like playlist or autoplay
-* Hide and block the Trending section
-* Protect extension options with a password
-* Filtering is done before any DOM rendering
+## About
 
-## Install
+TunTun Extension helps parents and guardians control YouTube content. Block unwanted videos, channels, and comments to create a safer viewing experience for your family.
 
-* [**Chrome Webstore**](https://chrome.google.com/webstore/detail/blocktube/bbeaicapbccfllodepmimpkgecanonai?hl=en-US)
-* [**Firefox AMO**](https://addons.mozilla.org/en-US/firefox/addon/blocktube/)
+**Perfect for:**
+- 👨‍👩‍👧‍👦 Parents managing children's YouTube access
+- 🏫 Educators controlling classroom content
+- 💼 Workplaces managing appropriate content
+- 🔒 Anyone wanting a cleaner YouTube experience
+
+**100% Free & Open Source** | Premium features coming soon
+
+---
+
+## Features
+
+### Content Filtering
+- ✅ **Block Videos by Title** - Filter out videos with specific words or phrases
+- ✅ **Block Entire Channels** - Remove channels permanently from YouTube
+- ✅ **Block by Channel Name** - Filter channels by name (supports patterns)
+- ✅ **Hide Comments** - Block comments from specific users or with certain content
+- ✅ **Quick Block** - Right-click any video to block instantly
+
+### Smart Filtering
+- ✅ **Duration Filters** - Hide videos that are too long or too short
+- ✅ **Hide YouTube Shorts** - Block all Shorts content
+- ✅ **Hide Trending** - Remove the Trending page entirely
+- ✅ **Hide Movies** - Remove YouTube Movies section
+- ✅ **Pattern Matching** - Use simple patterns or advanced regex
+
+### Safety & Control
+- 🔐 **Password Protection** - Prevent children from changing settings
+- ⚡ **Lightning Fast** - Blocks content before it even loads
+- 📱 **Works on Mobile** - Supports mobile YouTube (`m.youtube.com`)
+- 🎯 **Precise Control** - Block exactly what you want, nothing more
+
+### Premium Features (Coming Soon)
+- ☁️ **Cloud Sync** - Keep filters in sync across all devices
+- 🤖 **Remote Management** - Control settings from anywhere
+- 📊 **Usage Reports** - See what's been blocked
+- 💬 **Telegram Notifications** - Get alerts on your phone
+
+---
+
+## Installation
+
+### From Chrome Web Store (Recommended - Coming Soon)
+TunTun Extension will be available on the Chrome Web Store soon.
+
+### From Source (For Developers)
+```bash
+# Clone repository
+git clone https://github.com/boxobi-tech/tuntun-extension.git
+cd tuntun-extension
+
+# Build extension
+./tools/build.sh chrome
+
+# Load in Chrome
+# 1. Go to chrome://extensions/
+# 2. Enable "Developer mode"
+# 3. Click "Load unpacked"
+# 4. Select: dist/chrome/
+```
+
+---
+
+## Quick Start Guide
+
+### 1. Install the Extension
+Install from Chrome Web Store (coming soon) or build from source.
+
+### 2. Set Up Password Protection (Recommended for Parents)
+1. Click the TunTun icon in your browser
+2. Click "Options"
+3. Scroll to "UI Password"
+4. Set a password to prevent children from disabling filters
+
+### 3. Add Your First Filter
+**Example: Block videos about video games**
+1. Open Options → "Video Title" tab
+2. Add: `game`, `gaming`, `gameplay`, `fortnite`
+3. Click Save
+
+**Example: Block an entire channel**
+1. Right-click any video from that channel
+2. Select "BlockTube: Block Channel"
+3. Done! All their videos are hidden
+
+### 4. Use Advanced Filters (Optional)
+For power users, TunTun supports:
+- Regular expressions for complex patterns
+- Custom JavaScript for ultra-precise filtering
+- Duration ranges (e.g., only show videos 5-10 minutes long)
+
+---
+
+## How It Works
+
+TunTun filters YouTube content **before it loads**, so blocked videos never appear:
+- ✅ Filters work on: Home, Search, Recommendations, Comments
+- ✅ Blocked channels: Redirects to YouTube homepage
+- ✅ Blocked videos: Shows custom message or skips to next video
+- ✅ All data stored locally on your device (privacy-first)
+
+---
 
 ## FAQ
-  
-* What is the difference between "Channel ID" and "Channel Name"  
-  Channel names on YouTube are not unique and can be duplicated/changed  
-  whereas Channel ID is a unique identification string that never changes.  
-  If you want to block a specific single channel the preferred method is using it's ID,  
-  If you want to block multiple channels sharing similar name use it's name.
 
-* How can I get a channel's ID?  
-  Channel ID looks like this: UCXXXXXXXXXXXXXXXX  
-  To get it, simply browse to a channel page and look at the URL `/channel/UCXXXXXXXXXXXXXXXXXXXX`  
-  If the URL is `/user/BadChannelExample` use [This site](https://vabs.github.io/youtube-channel-name-converter/) to convert the username to the channel ID
+### Is TunTun Extension free?
+Yes! The core extension is 100% free and open source. Premium cloud features (sync, remote management) will be available as optional paid add-ons in the future.
 
-* How to block comments from specific user?  
-  Blocked channels comments are removed as well, so just add the user's name/channel ID
-  to your filters
+### How is this different from YouTube Restricted Mode?
+YouTube Restricted Mode is very basic. TunTun gives you **precise control**:
+- Block specific channels, not just categories
+- Block based on video titles with custom words
+- Works reliably (Restricted Mode often misses content)
+- You decide what's blocked, not YouTube's algorithm
 
-* What is the behaviour when browsing blocked channel?  
-  User will be redirected to YouTube homepage.
+### Can my kids disable this?
+Set a password in Options to prevent unauthorized changes. Children won't be able to disable filters or change settings without the password.
 
-* What is the behaviour when browsing blocked video?  
-  You can choose between two options:
-  - Block the entire page and leave a custom message
-  - Auto redirect user to the next video
+### What's the difference between TunTun and BlockTube?
+TunTun is based on BlockTube with a focus on parental controls and family safety. We're adding premium features like cloud sync and remote management (coming soon).
 
-* How can I ensure this extension cannot be bypassed?   
-  TODO
+### Does this work on YouTube Kids?
+This extension is for regular YouTube (youtube.com). YouTube Kids is a separate app with built-in restrictions.
 
-## Development & Build
+### What happens if a video is blocked?
+You can choose:
+- Show a custom message ("This video is blocked")
+- Auto-skip to the next video
+- Redirect to YouTube homepage (for channels)
 
-*Ubuntu*
-```
-# Install build requirements
+### Can I share my filters with family members?
+Currently, filters are stored locally. **Cloud Sync** (coming soon) will let you share filters across devices and family members.
+
+### Is my data private?
+Yes! All filters are stored locally on your device. Nothing is sent to external servers (unless you opt into premium cloud features in the future).
+
+### How do I get a channel's ID?
+Channel ID looks like: `UCxxxxxxxxxxxxxxxxxx`
+1. Visit the channel page
+2. Look at the URL: `/channel/UCxxxxxxxxxxxxxxxxxx`
+3. Copy the ID starting with "UC"
+4. If URL shows `/user/name` instead, use [this converter](https://vabs.github.io/youtube-channel-name-converter/)
+
+---
+
+## Support & Community
+
+- 🐛 **Report Bugs:** [GitHub Issues](https://github.com/boxobi-tech/tuntun-extension/issues)
+- 💬 **Discussions:** [GitHub Discussions](https://github.com/boxobi-tech/tuntun-extension/discussions)
+- 📖 **Documentation:** [Wiki](https://github.com/boxobi-tech/tuntun-extension/wiki) (coming soon)
+
+---
+
+## Development
+
+### Building from Source
+**Prerequisites:**
+```bash
+# Ubuntu/Debian
 sudo apt install nodejs npm
 sudo npm install -g terser
 
-# Clone Repo
-git clone https://github.com/amitbl/blocktube
-
-### Make your changes ###
-
-# Build package
-./tools/build.sh firefox
-./tools/build.sh chrome
-
-# Output packages locations
-./dist/firefox/blocktube_firefox_VERSION.zip
-./dist/chrome/blocktube_chrome_VERSION.zip
-
-# Temporary installation / debugging
-Firefox: https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/
-Chrome: https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked
+# macOS
+brew install node
+npm install -g terser
 ```
 
-## Future work
+**Build:**
+```bash
+git clone https://github.com/boxobi-tech/tuntun-extension.git
+cd tuntun-extension
+./tools/build.sh chrome
+# Output: dist/chrome/tuntun_chrome_v1.0.0.zip
+```
 
-* User-friendly options UI
-* Sync options to cloud provider / enterprise policies
-* Whitelist mode
-* Dynamic rules (match multiple rules to block a video)
+**Load in Chrome:**
+1. Go to `chrome://extensions/`
+2. Enable "Developer mode"
+3. Click "Load unpacked"
+4. Select `dist/chrome/`
+
+### Contributing
+We welcome contributions! TunTun is open source (GPL v3).
+
+**How to contribute:**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for detailed guidelines.
+
+---
 
 ## License
 
-This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details
+### Extension Code (GPL v3)
+This extension is licensed under the **GNU General Public License v3.0**, inherited from [BlockTube](https://github.com/amitbl/blocktube).
+
+**What this means:**
+- ✅ Free to use, modify, and distribute
+- ✅ Source code is always available
+- ✅ Modifications must remain open source
+- ✅ Commercial use allowed (under GPL terms)
+
+See [LICENSE](LICENSE) file for full details.
+
+### Premium Services (Future)
+Future premium cloud features will connect to proprietary backend services. The extension itself remains GPL v3.
+
+---
 
 ## Acknowledgments
 
-* Extension Icon from: http://www.designbolts.com/2013/09/08/40-free-shaded-social-media-icons/
+### Based on BlockTube
+TunTun Extension is a derivative work of [**BlockTube**](https://github.com/amitbl/blocktube) by [amitbl](https://github.com/amitbl).
+
+**Original BlockTube:**
+- Created by: amitbl
+- License: GPL v3.0
+- Repository: https://github.com/amitbl/blocktube
+
+We are grateful for the excellent foundation BlockTube provides and remain committed to keeping TunTun open source under GPL v3.
+
+### Additional Credits
+- Extension Icon: [Design Bolts](http://www.designbolts.com/2013/09/08/40-free-shaded-social-media-icons/)
+- Code Editor: [CodeMirror](https://codemirror.net/) (MIT License)
+
+### TunTun Team
+- Maintained by: [Boxobi Tech](https://github.com/boxobi-tech)
+- Repository: https://github.com/boxobi-tech/tuntun-extension
+
+---
+
+**Made with ❤️ for families** | Based on BlockTube by amitbl

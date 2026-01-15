@@ -20,7 +20,7 @@ set_version() {
 
 zipfile() {
     cd $DEST
-    zip "$DEST/blocktube_${BROWSER}_v${VERSION}.zip" -qr ./*
+    zip "$DEST/tuntun_${BROWSER}_v${VERSION}.zip" -qr ./*
 }
 
 clean() {
