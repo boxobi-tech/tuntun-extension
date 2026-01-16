@@ -25,6 +25,86 @@
 
   const textAreas = ['title', 'channelName', 'channelId', 'videoId', 'comment'];
 
+  // Filter count tracking
+  const filterCounts = {
+    title: 0,
+    channelName: 0,
+    channelId: 0,
+    videoId: 0,
+    comment: 0
+  };
+
+  /**
+   * Count active filters (non-empty, non-comment lines)
+   */
+  function countActiveFilters(text) {
+    const lines = text.split('\n');
+    return lines.filter(line => {
+      const trimmed = line.trim();
+      return trimmed !== '' && !trimmed.startsWith('//');
+    }).length;
+  }
+
+  /**
+   * Update filter count display for a specific filter type
+   */
+  function updateFilterCount(filterType) {
+    const editor = jsEditors[filterType];
+    if (!editor) return;
+
+    const count = countActiveFilters(editor.getValue());
+    filterCounts[filterType] = count;
+
+    // Update count text above editor
+    const countElement = $(`${filterType}-filter-count`);
+    if (countElement) {
+      const countText = count === 0 ? 'No active filters' :
+                        count === 1 ? '1 active filter' :
+                        `${count} active filters`;
+      countElement.querySelector('span').textContent = countText;
+    }
+
+    // Update tab badge
+    updateTabBadge(filterType, count);
+  }
+
+  /**
+   * Update the badge count in tab label
+   */
+  function updateTabBadge(filterType, count) {
+    const badgeId = `tab-${filterType === 'channelName' ? 'channel-name' :
+                          filterType === 'videoId' ? 'video-id' :
+                          filterType === 'channelId' ? 'channel-id' : filterType}-badge`;
+    const badge = $(badgeId);
+    if (badge) {
+      badge.textContent = count > 0 ? `(${count})` : '';
+      badge.style.display = count > 0 ? 'inline' : 'none';
+    }
+  }
+
+  /**
+   * Update all filter counts
+   */
+  function updateAllFilterCounts() {
+    textAreas.forEach(filterType => {
+      updateFilterCount(filterType);
+    });
+  }
+
+  /**
+   * Get placeholder text for each filter type
+   */
+  function getPlaceholderText(filterType) {
+    const placeholders = {
+      title: "Example: clickbait video\nExample with regex: /\\[GONE WRONG\\]/i",
+      channelName: "Example: spam channel name\nExample: Annoying YouTuber",
+      videoId: "Example: dQw4w9WgXcQ\nPaste video IDs from YouTube URLs",
+      channelId: "Example: UC_x5XG1OV2P6uZZ5FSM9Ttw\nPaste channel IDs from channel URLs",
+      comment: "Example: spam phrase\nExample: buy now"
+    };
+    return placeholders[filterType] || "";
+  }
+
   function detectColorScheme(){
     let theme="light";
 
@@ -100,6 +180,7 @@
 
     saveData('status_save');
     detectColorScheme();
+    updateAllFilterCounts(); // Update counts after save
     $('save_btn').classList.add('disabled-btn');
   }
 
@@ -163,6 +244,7 @@
     }
 
     setTimeout(_=>Object.values(jsEditors).forEach((v) => v.refresh()), 1); // https://stackoverflow.com/a/19970695
+    updateAllFilterCounts(); // Update counts after data load
     $('save_btn').classList.add('disabled-btn');
   }
 
@@ -228,6 +310,7 @@
         if (json.filterData && json.options) {
           populateForms(json);
           saveForm();
+          updateAllFilterCounts(); // Update counts after import
         }
       } catch (ex) {
         alert('This is not a valid TunTun Extension backup');
@@ -263,7 +346,7 @@
   }
 
   textAreas.concat('javascript').forEach((v) => {
-    jsEditors[v] = CodeMirror.fromTextArea($(v), {
+    const editorOptions = {
       mode: v === 'javascript' ? 'javascript' : 'blocktube',
       matchBrackets: true,
       autoCloseBrackets: true,
@@ -286,10 +369,21 @@
           }
         }
       }
-    });
+    };
+
+    // Add placeholder for non-javascript editors
+    if (v !== 'javascript') {
+      editorOptions.placeholder = getPlaceholderText(v);
+    }
+
+    jsEditors[v] = CodeMirror.fromTextArea($(v), editorOptions);
     cmResizer(jsEditors[v], $(v + '_resizer'));
     jsEditors[v].on("change",() => {
       $('options').dispatchEvent(new Event('change', { bubbles: true }));
+      // Update filter count on change
+      if (v !== 'javascript') {
+        updateFilterCount(v);
+      }
     });
   });
 

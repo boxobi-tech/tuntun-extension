@@ -225,6 +225,70 @@ fieldset:last-of-type div {
   margin-block: 1em;
 }
 
+/* Filter help text */
+.filter-help-text {
+  background: var(--light);
+  border: 1px solid var(--borders);
+  border-radius: 6px;
+  padding: 0.75em;
+  margin-bottom: 0.75em;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.filter-help-text p {
+  margin: 0;
+}
+
+.filter-help-text strong {
+  color: var(--white);
+}
+
+.filter-help-text a {
+  color: #06c;
+  text-decoration: underline;
+}
+
+.filter-help-text a:hover {
+  color: #0056b3;
+}
+
+/* Filter count display */
+.filter-count {
+  background: var(--btn-bg);
+  border-radius: 4px;
+  padding: 0.4em 0.75em;
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--white);
+  display: inline-block;
+}
+
+.filter-count span {
+  display: inline-block;
+}
+
+/* Tab badge for filter counts */
+.filter-badge {
+  font-size: 0.85em;
+  color: #06c;
+  font-weight: 600;
+  margin-left: 0.3em;
+  display: none; /* Hidden when count is 0 */
+}
+
+/* CodeMirror placeholder styling */
+.CodeMirror-placeholder {
+  color: #999 !important;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.cm-darktheme .CodeMirror-placeholder {
+  color: #6c757d !important;
+}
+
 /* Tooltip */
 .tooltip-link, .tooltip {
   background: #a43c46;

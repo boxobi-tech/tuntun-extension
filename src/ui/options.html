@@ -38,28 +38,29 @@
           <div class="tabset" id="tabbed-filters-parent">
             <div class="tab-menu" id="tabbed-filters-menu">
               <input type="radio" name="filter-tab" id="tab-title" aria-controls="title-tab-content" checked>
-              <label style="border-top: 1px solid var(--borders)" for="tab-title">Video title</label>
+              <label style="border-top: 1px solid var(--borders)" for="tab-title">Video title <span class="filter-badge" id="tab-title-badge"></span></label>
 
               <input type="radio" name="filter-tab" id="tab-channel-name" aria-controls="channel-name-tab-content">
-              <label for="tab-channel-name">Channel name</label>
+              <label for="tab-channel-name">Channel name <span class="filter-badge" id="tab-channel-name-badge"></span></label>
 
               <input type="radio" name="filter-tab" id="tab-video-id" aria-controls="videoid-tab-content">
-              <label for="tab-video-id">Video ID</label>
+              <label for="tab-video-id">Video ID <span class="filter-badge" id="tab-video-id-badge"></span></label>
 
               <input type="radio" name="filter-tab" id="tab-channel-id" aria-controls="channelid-tab-content">
-              <label for="tab-channel-id">Channel ID</label>
+              <label for="tab-channel-id">Channel ID <span class="filter-badge" id="tab-channel-id-badge"></span></label>
 
               <input type="radio" name="filter-tab" id="tab-comment" aria-controls="comment-tab-content">
-              <label for="tab-comment">Comment content</label>
-
-              <input type="radio" name="filter-tab" id="tab-advanced" aria-controls="advanced-tab-content">
-              <label for="tab-advanced">
-                Advanced Blocking
-              </label>
+              <label for="tab-comment">Comment content <span class="filter-badge" id="tab-comment-badge"></span></label>
 
             </div>
             <div class="tab-panels" id="tabbed-filters-content">
               <section id="title-tab-content" class="tab-panel">
+                <div class="filter-help-text">
+                  <p><strong>Block videos by title keywords.</strong> Matching is case-insensitive. One keyword per line. <a href="https://github.com/boxobi-tech/tuntun-extension/wiki" target="_blank">Learn more</a></p>
+                </div>
+                <div class="filter-count" id="title-filter-count">
+                  <span>No active filters</span>
+                </div>
                 <div>
                   <textarea id="title"></textarea>
                   <div id="title_resizer" class="cm-resizer"></div>
@@ -67,6 +68,12 @@
               </section>
 
               <section id="channel-name-tab-content" class="tab-panel">
+                <div class="filter-help-text">
+                  <p><strong>Block videos by channel name.</strong> Matching is case-insensitive. One keyword per line. <a href="https://github.com/boxobi-tech/tuntun-extension/wiki" target="_blank">Learn more</a></p>
+                </div>
+                <div class="filter-count" id="channelName-filter-count">
+                  <span>No active filters</span>
+                </div>
                 <div>
                   <textarea id="channelName"></textarea>
                   <div id="channelName_resizer" class="cm-resizer"></div>
@@ -74,6 +81,12 @@
               </section>
 
               <section id="videoid-tab-content" class="tab-panel">
+                <div class="filter-help-text">
+                  <p><strong>Block specific videos by their YouTube video ID (found in URLs).</strong> Exact match only. One ID per line. <a href="https://github.com/boxobi-tech/tuntun-extension/wiki" target="_blank">Learn more</a></p>
+                </div>
+                <div class="filter-count" id="videoId-filter-count">
+                  <span>No active filters</span>
+                </div>
                 <div>
                   <textarea id="videoId"></textarea>
                   <div id="videoId_resizer" class="cm-resizer"></div>
@@ -81,6 +94,12 @@
               </section>
 
               <section id="channelid-tab-content" class="tab-panel">
+                <div class="filter-help-text">
+                  <p><strong>Block entire channels by their YouTube channel ID.</strong> Exact match only. One ID per line. <a href="https://github.com/boxobi-tech/tuntun-extension/wiki" target="_blank">Learn more</a></p>
+                </div>
+                <div class="filter-count" id="channelId-filter-count">
+                  <span>No active filters</span>
+                </div>
                 <div>
                   <textarea id="channelId"></textarea>
                   <div id="channelId_resizer" class="cm-resizer"></div>
@@ -88,20 +107,27 @@
               </section>
 
               <section id="comment-tab-content" class="tab-panel">
+                <div class="filter-help-text">
+                  <p><strong>Block comments containing keywords.</strong> Matching is case-insensitive. One keyword per line. <a href="https://github.com/boxobi-tech/tuntun-extension/wiki" target="_blank">Learn more</a></p>
+                </div>
+                <div class="filter-count" id="comment-filter-count">
+                  <span>No active filters</span>
+                </div>
                 <div>
                   <textarea id="comment"></textarea>
                   <div id="comment_resizer" class="cm-resizer"></div>
                 </div>
               </section>
 
-              <section id="advanced-tab-content" class="tab-panel">
+              <!-- Advanced Blocking hidden for non-technical users -->
+              <section id="advanced-tab-content" class="tab-panel" style="display: none;">
                 <div id="advanced_tab" style="display: none" class="advanced">
                         <textarea id="javascript"></textarea>
                         <div id="javascript_resizer" class="cm-resizer"></div>
                 </div>
                 <div>
-                  <input id="enable_javascript" type="checkbox" />
-                  <label style="margin-top:5px" for="enable_javascript">Enable advanced blocking <a style="cursor: pointer" target="_blank" href="https://github.com/amitbl/blocktube/wiki/Advanced-Blocking" class="tooltip-link" title="Don't enable this unless you know some Javascript and have read the documentation">?</a></label>
+                  <input id="enable_javascript" type="checkbox" style="display: none;" />
+                  <label style="margin-top:5px; display: none;" for="enable_javascript">Enable advanced blocking</label>
                 </div>
               </section>
 
@@ -162,24 +188,15 @@
             <label for="autoplay">Enable Auto-playing next suggested video when blocking occurs</label>
           </div>
           <div>
-              <input id="suggestions_only" type="checkbox" />
-              <label for="suggestions_only">Disable direct access blocking <span class="tooltip" title="This option will make videos hidden in suggestions, and won't block them when directly visiting them via URL, or when embedded on other sites.">?</span></label>
-          </div>
-          <div>
             <input id="block_feedback" type="checkbox" />
-            <label for="block_feedback">Click on "Not interested / Don't recommend channel" when blocking using context menus <span class="tooltip" title="* This option will trigger the normal YouTube operations in addition to BlockTube's. &#10;* This will work only on videos that normally have these options available in menu.&#10;* Clicking on the 'Undo' button will not remove the video from your blocklist.">?</span></label>
+            <label for="block_feedback">Click on "Not interested / Don't recommend channel" when blocking using context menus <span class="tooltip" title="* This option will trigger the normal YouTube operations in addition to TunTun Extension's. &#10;* This will work only on videos that normally have these options available in menu.&#10;* Clicking on the 'Undo' button will not remove the video from your blocklist.">?</span></label>
           </div>
-          <div>
+          <!-- Hidden options - kept for JavaScript compatibility -->
+          <div style="display: none;">
+            <input id="suggestions_only" type="checkbox" />
             <input id="disable_you_there" type="checkbox" />
-            <label for="disable_you_there">Disable automatic pause of videos <span class="tooltip" title="This will remove &quot;Video paused. Continue watching?&quot; pop-up messages">?</span></label>
-          </div>
-          <div>
             <input id="disable_db_normalize" type="checkbox" />
-            <label for="disable_db_normalize">Disable YouTube's audio loudness normalization <span class="tooltip" title="Enabling this option may cause YouTube to detect the extension as an ad-blocker">?</span></label>
-          </div>
-          <div>
             <input id="disable_on_history" type="checkbox" />
-            <label for="disable_on_history">Disable blocking on watch history page</label>
           </div>
           </div>
         </fieldset>
