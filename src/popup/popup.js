@@ -1,26 +1,24 @@
 let enabled = true;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
-  function detectColorScheme() {
+  async function detectColorScheme() {
+    const config = await window.storageManager.getConfig();
+    let uiTheme = "light";
+    let storageTheme = config?.uiTheme;
 
-    chrome.storage.local.get("storageData", (result) => {
-      let uiTheme = "light";
-      let storageTheme = result.storageData?.uiTheme;
+    if(storageTheme){
+      uiTheme = storageTheme;
+    } else if(!window.matchMedia) {
+      uiTheme = "light";
+    } else if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      uiTheme = "dark";
+    }
 
-      if(storageTheme){
-        uiTheme = storageTheme;
-      } else if(!window.matchMedia) {
-        uiTheme = "light";
-      } else if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        uiTheme = "dark";
-      }
-
-      document.documentElement.setAttribute("data-theme", uiTheme);
-    });
+    document.documentElement.setAttribute("data-theme", uiTheme);
   }
 
-  detectColorScheme();
+  await detectColorScheme();
   
 
   const checkbox = document.getElementById("toggle-extension");
@@ -35,20 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Restore the switch state from storage
-  chrome.storage.local.get(["enabled", "storageData"], (result) => {
-    if (result.storageData && result.storageData.uiPass) {
-      if (chrome.runtime.openOptionsPage) {
-        chrome.runtime.openOptionsPage();
-        window.close();
-      }
-    }
+  const config = await window.storageManager.getConfig();
 
-    if (result.enabled === undefined) {
-      result.enabled = true;
+  // If UI password is set, redirect to options page
+  if (config && config.uiPass) {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+      window.close();
     }
-    checkbox.checked = !!result.enabled;
-    statusText.textContent = !!result.enabled ? "On" : "Off";
-  });
+  }
+
+  // Load enabled state (not part of synced config)
+  const enabledData = await chrome.storage.local.get("enabled");
+  const enabledValue = enabledData.enabled === undefined ? true : !!enabledData.enabled;
+  checkbox.checked = enabledValue;
+  statusText.textContent = enabledValue ? "On" : "Off";
 
   // Listen for changes to the switch
   checkbox.addEventListener("change", (event) => {

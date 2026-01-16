@@ -1,5 +1,8 @@
 'use strict';
 
+// Load storage manager for service worker
+importScripts('../services/storage-manager.js');
+
 const has = Object.prototype.hasOwnProperty;
 const unicodeBoundry = "[ \n\r\t!@#$%^&*()_\\-=+\\[\\]\\\\\\|;:'\",\\.\\/<>\\?`~:]+";
 const ports = {};
@@ -107,16 +110,34 @@ const utils = {
   }
 };
 
-chrome.storage.local.get(['storageData', 'enabled'], (data) => {
-  if (data !== undefined && Object.keys(data).length > 0) {
-    storage = data.storageData;
-    compiledStorage = utils.compileAll(data.storageData);
+(async () => {
+  // Load configuration using StorageManager
+  storage = await storageManager.getConfig();
+  compiledStorage = utils.compileAll(storage);
+
+  // Load enabled state from local storage
+  const enabledData = await chrome.storage.local.get('enabled');
+  if (Object.hasOwn(enabledData, 'enabled')) {
+    enabled = enabledData.enabled;
   }
-  if (Object.hasOwn(data, 'enabled')) {
-    enabled = data.enabled
-  }
+
   initStorage = true;
   utils.sendFiltersToAll();
+
+  // Listen for config changes from StorageManager
+  storageManager.onConfigChange((newConfig, source) => {
+    storage = newConfig;
+    compiledStorage = utils.compileAll(newConfig);
+    utils.sendFiltersToAll();
+  });
+
+  // Listen for enabled state changes
+  chrome.storage.onChanged.addListener((changes) => {
+    if (has.call(changes, 'enabled')) {
+      enabled = changes.enabled.newValue;
+      utils.sendFiltersToAll();
+    }
+  });
 
   chrome.runtime.onConnect.addListener((port) => {
     port.onDisconnect.addListener((port) => {
@@ -125,31 +146,18 @@ chrome.storage.local.get(['storageData', 'enabled'], (data) => {
     });
     const key = port.sender.contextId || port.sender.frameId;
     ports[key] = port;
-    port.onMessage.addListener((msg) => {
+    port.onMessage.addListener(async (msg) => {
       switch (msg.type) {
         case 'contextBlock': {
           storage.filterData[msg.data.type].push(...msg.data.entries);
-          chrome.storage.local.set({storageData: storage});
+          await storageManager.setConfig(storage);
           break;
         }
       }
     });
     utils.sendFilters(port);
   });
-
-  chrome.storage.onChanged.addListener((changes) => {
-    if (has.call(changes, 'storageData')) {
-      storage = changes.storageData.newValue;
-      compiledStorage = utils.compileAll(changes.storageData.newValue);
-      utils.sendFiltersToAll();
-    }
-    if (has.call(changes, 'enabled')) {
-      enabled = changes.enabled.newValue;
-      utils.sendFiltersToAll();
-    }
-  });
-
-});
+})();
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {

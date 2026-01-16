@@ -200,6 +200,28 @@
           </div>
           </div>
         </fieldset>
+        <legend>Sync Settings</legend>
+        <fieldset>
+          <div class="sync-section">
+            <div>
+              <input id="sync-enabled" type="checkbox" />
+              <label for="sync-enabled">Enable cross-device sync</label>
+              <span class="tooltip" title="Sync your filter settings across all Chrome browsers signed in with the same Google account. No external services used.">?</span>
+            </div>
+
+            <div id="sync-details" style="display: none; margin-top: 1em; padding: 1em; background: var(--light); border-radius: 6px;">
+              <p style="margin-top: 0;"><strong>Sync Status</strong></p>
+              <div style="margin-left: 1em;">
+                <p>Last synced: <span id="sync-last-sync">Never</span></p>
+                <p>Storage used: <span id="sync-quota">0%</span> of 100 KB</p>
+                <p style="font-size: 0.9em; color: var(--white); opacity: 0.8;">
+                  ℹ️ Your settings sync via Chrome's built-in sync using your Google account.
+                  No data is sent to external servers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </fieldset>
         <div class="buttons sticky">
           <input type="button" class="disabled-btn" id="save_btn" value="✔ Save" />
           <input type="button" id="export" value="🡅 Export" />
@@ -209,6 +231,20 @@
           <div id="status_save" class="alert"></div>
         </div>
       </form>
+    </div>
+
+    <!-- Conflict resolution modal -->
+    <div id="conflict-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h2>Sync Conflict Detected</h2>
+        <p>You have different settings on this device and in the cloud. Which would you like to keep?</p>
+
+        <div class="conflict-options">
+          <button id="use-local-btn" class="btn">Use Local Settings (Upload)</button>
+          <button id="use-cloud-btn" class="btn">Use Cloud Settings (Download)</button>
+          <button id="cancel-sync-btn" class="btn-secondary">Cancel Sync</button>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript" src="cm/codemirror.js"></script>
@@ -223,6 +259,7 @@
     <script type="text/javascript" src="cm/javascript.js"></script>
     <script type="text/javascript" src="cm/simple.js"></script>
     <script type="text/javascript" src="cm-syntax.js"></script>
+    <script type="text/javascript" src="../services/storage-manager.js"></script>
     <script type="text/javascript" src="options.js"></script>
   </body>
 </html>

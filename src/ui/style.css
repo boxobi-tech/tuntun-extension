@@ -563,3 +563,85 @@ input#import {
   /* Other properties like column-rule can be added */
 }
 }
+
+/* Sync section styles */
+.sync-section {
+  margin-block: 1em;
+}
+
+#sync-details {
+  font-size: 0.9em;
+}
+
+#sync-details p {
+  margin: 0.5em 0;
+}
+
+/* Conflict modal */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  background-color: var(--dark);
+  margin: 10% auto;
+  padding: 2em;
+  border: 1px solid var(--borders);
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  color: var(--white);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--white);
+}
+
+.modal-content p {
+  margin: 1em 0;
+}
+
+.conflict-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1.5em;
+}
+
+.btn {
+  padding: 0.75em;
+  background: var(--btn-bg);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: 150ms all;
+}
+
+.btn:hover {
+  background: var(--btn-bg-focus);
+  border: 1px solid var(--borders);
+}
+
+.btn-secondary {
+  padding: 0.75em;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--borders);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: 150ms all;
+}
+
+.btn-secondary:hover {
+  background: var(--btn-bg);
+}

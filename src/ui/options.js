@@ -132,21 +132,121 @@
 
   }
 
-  function loadData() {
-    chrome.storage.local.get('storageData', (data) => {
-      if (Object.keys(data).length > 0) {
-        storageData = data.storageData;
-      }
-      detectColorScheme();
-      checkForLogin();
-    });
+  async function loadData() {
+    storageData = await window.storageManager.getConfig();
+    detectColorScheme();
+    checkForLogin();
+
+    // Initialize sync status UI
+    setTimeout(() => {
+      updateSyncStatus();
+    }, 100);
   }
 
-  function saveData(label = undefined) {
+  async function saveData(label = undefined) {
     if (!isLoggedIn) return;
-    chrome.storage.local.set({ storageData }, () => {
-      if (label !== undefined) setLabel(label, 'Options Saved');
-    });
+    await window.storageManager.setConfig(storageData);
+    if (label !== undefined) setLabel(label, 'Options Saved');
+  }
+
+  /**
+   * Handle sync toggle enable/disable
+   */
+  async function handleSyncToggle(enabled) {
+    if (enabled) {
+      const result = await window.storageManager.enableSync();
+
+      if (result.needsResolution) {
+        // Show conflict resolution UI
+        showConflictDialog(result.localConfig, result.syncConfig);
+      } else {
+        setLabel('status_save', 'Sync enabled');
+        updateSyncStatus();
+      }
+    } else {
+      await window.storageManager.disableSync();
+      setLabel('status_save', 'Sync disabled');
+      updateSyncStatus();
+    }
+  }
+
+  /**
+   * Update sync status UI elements
+   */
+  async function updateSyncStatus() {
+    const status = await window.storageManager.getSyncStatus();
+
+    // Update UI elements if they exist
+    const syncEnabledCheckbox = $('sync-enabled');
+    const syncQuota = $('sync-quota');
+    const syncLastSync = $('sync-last-sync');
+    const syncDetails = $('sync-details');
+
+    if (syncEnabledCheckbox) {
+      syncEnabledCheckbox.checked = status.enabled;
+    }
+
+    if (syncQuota) {
+      syncQuota.textContent = `${status.quotaPercent}%`;
+    }
+
+    if (syncLastSync && status.lastSyncAt) {
+      const lastSync = new Date(status.lastSyncAt);
+      syncLastSync.textContent = lastSync.toLocaleString();
+    }
+
+    if (syncDetails) {
+      syncDetails.style.display = status.enabled ? 'block' : 'none';
+    }
+  }
+
+  /**
+   * Show conflict resolution dialog
+   */
+  function showConflictDialog(localConfig, syncConfig) {
+    const modal = $('conflict-modal');
+    if (!modal) {
+      console.error('Conflict modal not found in DOM');
+      return;
+    }
+
+    modal.style.display = 'block';
+
+    const useLocalBtn = $('use-local-btn');
+    const useCloudBtn = $('use-cloud-btn');
+    const cancelSyncBtn = $('cancel-sync-btn');
+
+    if (useLocalBtn) {
+      useLocalBtn.onclick = async () => {
+        await window.storageManager.setConfig(localConfig);
+        modal.style.display = 'none';
+        setLabel('status_save', 'Local config uploaded');
+        updateSyncStatus();
+      };
+    }
+
+    if (useCloudBtn) {
+      useCloudBtn.onclick = async () => {
+        storageData = syncConfig;
+        populateForms();
+        await saveForm();
+        modal.style.display = 'none';
+        setLabel('status_save', 'Cloud config downloaded');
+        updateSyncStatus();
+      };
+    }
+
+    if (cancelSyncBtn) {
+      cancelSyncBtn.onclick = async () => {
+        await window.storageManager.disableSync();
+        modal.style.display = 'none';
+        const syncEnabledCheckbox = $('sync-enabled');
+        if (syncEnabledCheckbox) {
+          syncEnabledCheckbox.checked = false;
+        }
+        updateSyncStatus();
+      };
+    }
   }
 
   function saveForm() {
@@ -428,6 +528,14 @@
       $('advanced_tab').style.display = "none";
     }
   })
+
+  // Sync toggle event listener
+  const syncEnabledCheckbox = $('sync-enabled');
+  if (syncEnabledCheckbox) {
+    syncEnabledCheckbox.addEventListener('change', (evt) => {
+      handleSyncToggle(evt.target.checked);
+    });
+  }
 
   $('options').addEventListener('change', (evt) => {
     if (evt.target.tagName === 'INPUT' && evt.target.getAttribute('type') === 'radio') return;
